@@ -20,6 +20,7 @@
       --on-background: #000000;
       --on-surface: #000000;
       --on-error: #ffffff;
+      --success: #4caf50;
     }
     
     body {
@@ -58,29 +59,31 @@
     
     .note-card {
       background-color: var(--surface);
-      border-radius: 4px;
+      border-radius: 8px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-      margin-bottom: 16px;
+      margin-bottom: 24px;
       overflow: hidden;
-      transition: box-shadow 0.3s cubic-bezier(.25,.8,.25,1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-left: 4px solid var(--primary-color);
     }
     
     .note-card:hover {
-      box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
     
     .note-header {
       padding: 16px;
-      border-bottom: 1px solid rgba(0,0,0,0.1);
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      background-color: rgba(98, 0, 238, 0.05);
     }
     
     .note-title {
       font-weight: 500;
       font-size: 1.1rem;
       margin: 0;
-      flex-grow: 1;
       color: var(--primary-color);
     }
     
@@ -89,26 +92,36 @@
     }
     
     .note-text {
-      margin: 0 0 8px 0;
+      margin: 0 0 12px 0;
+      color: #333;
+    }
+    
+    .note-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
     }
     
     .note-link {
       display: inline-flex;
       align-items: center;
+      background-color: rgba(98, 0, 238, 0.1);
       color: var(--primary-color);
       text-decoration: none;
-      padding: 8px 0;
-      margin-right: 16px;
+      padding: 8px 12px;
+      border-radius: 20px;
       font-weight: 500;
+      transition: all 0.2s ease;
     }
     
     .note-link:hover {
-      text-decoration: underline;
+      background-color: rgba(98, 0, 238, 0.2);
+      text-decoration: none;
     }
     
     .note-link .material-icons {
       font-size: 1rem;
-      margin-right: 4px;
+      margin-right: 6px;
     }
     
     .fab {
@@ -126,11 +139,77 @@
       box-shadow: 0 3px 5px rgba(0,0,0,0.2);
       cursor: pointer;
       transition: all 0.3s;
+      border: none;
+      outline: none;
     }
     
     .fab:hover {
       background-color: var(--primary-dark);
       box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      transform: scale(1.05);
+    }
+    
+    .compare-section {
+      margin-top: 32px;
+      padding: 24px;
+      background-color: var(--surface);
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    }
+    
+    .compare-title {
+      margin-top: 0;
+      color: var(--primary-color);
+      border-bottom: 1px solid #eee;
+      padding-bottom: 12px;
+    }
+    
+    .compare-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    
+    .compare-card {
+      padding: 16px;
+      border-radius: 8px;
+      background-color: rgba(98, 0, 238, 0.05);
+      border: 1px solid rgba(98, 0, 238, 0.1);
+    }
+    
+    .uni-name {
+      font-weight: 500;
+      color: var(--primary-color);
+      margin-top: 0;
+    }
+    
+    .uni-detail {
+      margin: 8px 0;
+      font-size: 0.9rem;
+    }
+    
+    .pros-cons {
+      margin-top: 12px;
+    }
+    
+    .pros {
+      color: var(--success);
+    }
+    
+    .cons {
+      color: var(--error);
+    }
+    
+    .tag {
+      display: inline-block;
+      background-color: var(--primary-light);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      margin-right: 8px;
+      margin-bottom: 8px;
     }
     
     @media (max-width: 600px) {
@@ -145,6 +224,10 @@
       .note-header, .note-content {
         padding: 12px;
       }
+      
+      .compare-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -156,57 +239,203 @@
   <div class="container">
     <div class="note-card">
       <div class="note-header">
-        <h2 class="note-title">MSI</h2>
+        <h2 class="note-title">MSI Laptop</h2>
       </div>
       <div class="note-content">
-        <p class="note-text">laptop MSI Thin 15 B7UC-004NL 15.6" 144Hz R5 7535HS 16GB 512SSD RTX3050 W11</p>
-        <a href="https://www.rdveikals.lv/products/lv/150/602664/sort/5/filter/0_0_0_0/Thin-15-B7UC-004NL-15.6-144Hz-R5-7535HS-16GB-512SSD-RTX3050-W11-portat%C4%ABvais-dators.html" target="_blank" class="note-link">
-          <span class="material-icons">open_in_new</span>
-          RD Veikals
-        </a>
-        <a href="https://www.msi.com/Laptop/Thin-A15-B7UX" target="_blank" class="note-link">
-          <span class="material-icons">open_in_new</span>
-          MSI Official
-        </a>
+        <p class="note-text">MSI Thin 15 B7UC-004NL 15.6" 144Hz R5 7535HS 16GB 512SSD RTX3050 W11</p>
+        <div class="note-links">
+          <a href="https://www.rdveikals.lv/products/lv/150/602664/sort/5/filter/0_0_0_0/Thin-15-B7UC-004NL-15.6-144Hz-R5-7535HS-16GB-512SSD-RTX3050-W11-portat%C4%ABvais-dators.html" target="_blank" class="note-link">
+            <span class="material-icons">shopping_cart</span>
+            RD Veikals
+          </a>
+          <a href="https://www.msi.com/Laptop/Thin-A15-B7UX" target="_blank" class="note-link">
+            <span class="material-icons">info</span>
+            MSI Official
+          </a>
+        </div>
       </div>
     </div>
     
-    <div class="note-card">
-      <div class="note-header">
-        <h2 class="note-title">Masters</h2>
+    <div class="compare-section">
+      <h2 class="compare-title">University Comparison</h2>
+      <p class="note-text">Comparing master's programs in Latvia for international students:</p>
+      
+      <div class="compare-grid">
+        <div class="compare-card">
+          <h3 class="uni-name">Rezekne Academy of Technologies</h3>
+          <div class="uni-detail"><strong>Program:</strong> Management Science</div>
+          <div class="uni-detail"><strong>Tuition:</strong> €3,290/year</div>
+          <div class="uni-detail"><strong>Duration:</strong> 2 years</div>
+          <div class="uni-detail"><strong>Language:</strong> English</div>
+          
+          <div class="pros-cons">
+            <div class="pros">
+              <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_up</span>
+              <strong>Pros:</strong>
+              <ul>
+                <li>Lower cost than universities in Riga</li>
+                <li>Practical focus</li>
+                <li>Smaller class sizes</li>
+              </ul>
+            </div>
+            <div class="cons">
+              <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_down</span>
+              <strong>Cons:</strong>
+              <ul>
+                <li>Smaller city (Rezekne)</li>
+                <li>Less international recognition</li>
+              </ul>
+            </div>
+          </div>
+          
+          <a href="https://rta.lv/study-programms/management-science" target="_blank" class="note-link" style="margin-top: 12px; display: inline-block;">
+            <span class="material-icons">school</span>
+            Program Details
+          </a>
+        </div>
+        
+        <div class="compare-card">
+          <h3 class="uni-name">Daugavpils University</h3>
+          <div class="uni-detail"><strong>Program:</strong> Computer Science</div>
+          <div class="uni-detail"><strong>Tuition:</strong> €2,500-3,000/year</div>
+          <div class="uni-detail"><strong>Duration:</strong> 2 years</div>
+          <div class="uni-detail"><strong>Language:</strong> English</div>
+          
+          <div class="pros-cons">
+            <div class="pros">
+              <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_up</span>
+              <strong>Pros:</strong>
+              <ul>
+                <li>Technical program with good career prospects</li>
+                <li>Affordable tuition</li>
+                <li>Research opportunities</li>
+              </ul>
+            </div>
+            <div class="cons">
+              <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_down</span>
+              <strong>Cons:</strong>
+              <ul>
+                <li>Located in Daugavpils (smaller city)</li>
+                <li>More academically rigorous</li>
+              </ul>
+            </div>
+          </div>
+          
+          <a href="https://du.lv/en/studies/study-programmes/academic-master-study-programmes/computer-science/" target="_blank" class="note-link" style="margin-top: 12px; display: inline-block;">
+            <span class="material-icons">school</span>
+            Program Details
+          </a>
+        </div>
+        <div class="compare-card">
+          <h3 class="uni-name">Daugavpils University</h3>
+          <div class="uni-detail"><strong>Program:</strong> Computer Science</div>
+          <div class="uni-detail"><strong>Tuition:</strong> €2,500-3,000/year</div>
+          <div class="uni-detail"><strong>Duration:</strong> 2 years</div>
+          <div class="uni-detail"><strong>Language:</strong> English</div>
+          
+          <div class="pros-cons">
+            <div class="pros">
+              <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_up</span>
+              <strong>Pros:</strong>
+              <ul>
+                <li>Technical program with good career prospects</li>
+                <li>Affordable tuition</li>
+                <li>Research opportunities</li>
+              </ul>
+            </div>
+            <div class="cons">
+              <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_down</span>
+              <strong>Cons:</strong>
+              <ul>
+                <li>Located in Daugavpils (smaller city)</li>
+                <li>More academically rigorous</li>
+              </ul>
+            </div>
+          </div>
+          
+          <a href="https://du.lv/en/studies/study-programmes/academic-master-study-programmes/computer-science/" target="_blank" class="note-link" style="margin-top: 12px; display: inline-block;">
+            <span class="material-icons">school</span>
+            Program Details
+          </a>
+        </div>
+        <div class="compare-card">
+          <h3 class="uni-name">Daugavpils University</h3>
+          <div class="uni-detail"><strong>Program:</strong> Computer Science</div>
+          <div class="uni-detail"><strong>Tuition:</strong> €2,500-3,000/year</div>
+          <div class="uni-detail"><strong>Duration:</strong> 2 years</div>
+          <div class="uni-detail"><strong>Language:</strong> English</div>
+          
+          <div class="pros-cons">
+            <div class="pros">
+              <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_up</span>
+              <strong>Pros:</strong>
+              <ul>
+                <li>Technical program with good career prospects</li>
+                <li>Affordable tuition</li>
+                <li>Research opportunities</li>
+              </ul>
+            </div>
+            <div class="cons">
+              <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_down</span>
+              <strong>Cons:</strong>
+              <ul>
+                <li>Located in Daugavpils (smaller city)</li>
+                <li>More academically rigorous</li>
+              </ul>
+            </div>
+          </div>
+          
+          <a href="https://du.lv/en/studies/study-programmes/academic-master-study-programmes/computer-science/" target="_blank" class="note-link" style="margin-top: 12px; display: inline-block;">
+            <span class="material-icons">school</span>
+            Program Details
+          </a>
+        </div>
+        
+        <div class="compare-card">
+          <h3 class="uni-name">EKA University</h3>
+          <div class="uni-detail"><strong>Program:</strong> Business Administration</div>
+          <div class="uni-detail"><strong>Tuition:</strong> €3,200/year</div>
+          <div class="uni-detail"><strong>Duration:</strong> 2 years</div>
+          <div class="uni-detail"><strong>Language:</strong> English</div>
+          
+          <div class="pros-cons">
+            <div class="pros">
+              <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_up</span>
+              <strong>Pros:</strong>
+              <ul>
+                <li>Located in Riga (capital city)</li>
+                <li>Business networking opportunities</li>
+                <li>Practical business education</li>
+              </ul>
+            </div>
+            <div class="cons">
+              <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_down</span>
+              <strong>Cons:</strong>
+              <ul>
+                <li>Higher cost of living in Riga</li>
+                <li>More expensive than regional options</li>
+              </ul>
+            </div>
+          </div>
+          
+          <a href="https://www.augstskola.lv/?parent=123&lng=eng" target="_blank" class="note-link" style="margin-top: 12px; display: inline-block;">
+            <span class="material-icons">school</span>
+            Program Details
+          </a>
+        </div>
       </div>
-      <div class="note-content">
-        <p class="note-text">Rezekne Academy of Technologies</p>
-        <a href="https://rta.lv/study-programms/management-science" target="_blank" class="note-link">
-          <span class="material-icons">open_in_new</span>
-          Other country citizens: 3290 EUR / year
-        </a>
-      </div>
-    </div>
-    
-    <div class="note-card">
-      <div class="note-header">
-        <h2 class="note-title">Daugavpils University / Masters</h2>
-      </div>
-      <div class="note-content">
-        <p class="note-text">Computer Science</p>
-        <a href="https://du.lv/en/studies/study-programmes/academic-master-study-programmes/computer-science/" target="_blank" class="note-link">
-          <span class="material-icons">open_in_new</span>
-          Program Details
-        </a>
-      </div>
-    </div>
-    
-    <div class="note-card">
-      <div class="note-header">
-        <h2 class="note-title">EKA University of Applied Sciences</h2>
-      </div>
-      <div class="note-content">
-        <p class="note-text">Business Administration</p>
-        <a href="https://www.augstskola.lv/?parent=123&lng=eng" target="_blank" class="note-link">
-          <span class="material-icons">open_in_new</span>
-          Tuition fee: 3,200 EUR/year
-        </a>
+      
+      
+      <div style="margin-top: 24px; background-color: rgba(3, 218, 198, 0.1); padding: 16px; border-radius: 8px;">
+        <h3 style="margin-top: 0; color: var(--primary-color);">Why These Universities?</h3>
+        <p>These Latvian universities offer good value for international students:</p>
+        <div>
+          <span class="tag">Affordable</span>
+          <span class="tag">English Programs</span>
+          <span class="tag">EU Degrees</span>
+          <span class="tag">Quality Education</span>
+        </div>
+        <p style="margin-bottom: 0;">Compared to Western Europe, Latvia provides quality education at lower costs, with all three being accredited institutions in the EU.</p>
       </div>
     </div>
   </div>
