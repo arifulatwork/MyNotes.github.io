@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Notepad</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #6200ee;
+      --primary-light: #9e47ff;
+      --primary-dark: #0400ba;
+      --secondary-color: #03dac6;
+      --background: #f5f5f5;
+      --surface: #ffffff;
+      --error: #b00020;
+      --on-primary: #ffffff;
+      --on-secondary: #000000;
+      --on-background: #000000;
+      --on-surface: #000000;
+      --on-error: #ffffff;
+      --success: #4caf50;
+    }
+    
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-background);
+      line-height: 1.6;
+    }
+    
+    .app-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: var(--primary-color);
+      color: var(--on-primary);
+      padding: 16px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+    }
+    
+    .app-bar h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 500;
+      flex-grow: 1;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 24px auto;
+      padding: 0 16px;
+    }
+    
+    .note-card {
+      background-color: var(--surface);
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+      margin-bottom: 24px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-left: 4px solid var(--primary-color);
+    }
+    
+    .note-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    .note-header {
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: rgba(98, 0, 238, 0.05);
+    }
+    
+    .note-title {
+      font-weight: 500;
+      font-size: 1.1rem;
+      margin: 0;
+      color: var(--primary-color);
+    }
+    
+    .note-content {
+      padding: 16px;
+    }
+    
+    .note-text {
+      margin: 0 0 12px 0;
+      color: #333;
+    }
+    
+    .note-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    
+    .note-link {
+      display: inline-flex;
+      align-items: center;
+      background-color: rgba(98, 0, 238, 0.1);
+      color: var(--primary-color);
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    
+    .note-link:hover {
+      background-color: rgba(98, 0, 238, 0.2);
+      text-decoration: none;
+    }
+    
+    .note-link .material-icons {
+      font-size: 1rem;
+      margin-right: 6px;
+    }
+    
+    .fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      color: var(--on-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: all 0.3s;
+      border: none;
+      outline: none;
+    }
+    
+    .fab:hover {
+      background-color: var(--primary-dark);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      transform: scale(1.05);
+    }
+    
+    .compare-section {
+      margin-top: 32px;
+      padding: 24px;
+      background-color: var(--surface);
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    }
+    
+    .compare-title {
+      margin-top: 0;
+      color: var(--primary-color);
+      border-bottom: 1px solid #eee;
+      padding-bottom: 12px;
+    }
+    
+    .compare-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    
+    .compare-card {
+      padding: 16px;
+      border-radius: 8px;
+      background-color: rgba(98, 0, 238, 0.05);
+      border: 1px solid rgba(98, 0, 238, 0.1);
+    }
+    
+    .uni-name {
+      font-weight: 500;
+      color: var(--primary-color);
+      margin-top: 0;
+    }
+    
+    .uni-detail {
+      margin: 8px 0;
+      font-size: 0.9rem;
+    }
+    
+    .pros-cons {
+      margin-top: 12px;
+    }
+    
+    .pros {
+      color: var(--success);
+    }
+    
+    .cons {
+      color: var(--error);
+    }
+    
+    .tag {
+      display: inline-block;
+      background-color: var(--primary-light);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+    
+    /* Tab styles */
+    .tabs {
+      display: flex;
+      margin-bottom: 24px;
+      border-bottom: 1px solid #ddd;
+      flex-wrap: wrap;
+    }
+    
+    .tab {
+      padding: 12px 24px;
+      cursor: pointer;
+      font-weight: 500;
+      color: #666;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+    }
+    
+    .tab.active {
+      color: var(--primary-color);
+      border-bottom: 3px solid var(--primary-color);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    /* Country tabs */
+    .country-tabs {
+      display: flex;
+      margin-bottom: 16px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    
+    .country-tab {
+      padding: 8px 16px;
+      cursor: pointer;
+      font-weight: 500;
+      color: #666;
+      border-radius: 20px;
+      margin-right: 8px;
+      white-space: nowrap;
+      background-color: rgba(0,0,0,0.05);
+      transition: all 0.3s;
+    }
+    
+    .country-tab.active {
+      color: var(--on-primary);
+      background-color: var(--primary-color);
+    }
+    
+    .country-content {
+      display: none;
+    }
+    
+    .country-content.active {
+      display: block;
+    }
+    
+    @media (max-width: 600px) {
+      .container {
+        margin: 16px auto;
+      }
+      
+      .app-bar h1 {
+        font-size: 1.25rem;
+      }
+      
+      .note-header, .note-content {
+        padding: 12px;
+      }
+      
+      .compare-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .tab {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+      }
+      
+      .country-tab {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="app-bar">
+    <h1>My Notepad</h1>
+  </header>
+  
+  <div class="container">
+    <div class="tabs">
+      <div class="tab active" onclick="openTab('products')">My Products</div>
+      <div class="tab" onclick="openTab('universities')">University Comparison</div>
+    </div>
+    
+    <div id="products" class="tab-content active">
+  <div class="note-card">
+    <div class="note-header">
+      <h2 class="note-title">MSI Laptop</h2>
+    </div>
+    <div class="note-content">
+      <p class="note-text">MSI Thin 15 B7UC-004NL 15.6" 144Hz R5 7535HS 16GB 512SSD RTX3050 W11</p>
+      <div class="note-links">
+        <a href="https://www.rdveikals.lv/products/lv/150/602664/sort/5/filter/0_0_0_0/Thin-15-B7UC-004NL-15.6-144Hz-R5-7535HS-16GB-512SSD-RTX3050-W11-portat%C4%ABvais-dators.html" target="_blank" class="note-link">
+          <span class="material-icons">shopping_cart</span>
+          Buy from Shop: RD Electronics, Liepaja
+        </a>
+        <a href="https://www.msi.com/Laptop/Thin-A15-B7UX" target="_blank" class="note-link">
+          <span class="material-icons">info</span>
+          MSI Official
+        </a>
+      </div>
+      <div class="invoice-number" style="margin-top: 10px; font-weight: bold;">
+        Invoice Number: #00004948
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+    <div id="universities" class="tab-content">
+      <div class="compare-section">
+        <h2 class="compare-title">University Comparison</h2>
+        <p class="note-text">Compare universities by country:</p>
+        
+        <div class="country-tabs">
+          <div class="country-tab active" onclick="openCountry('latvia')">Latvia</div>
+          <div class="country-tab" onclick="openCountry('portugal')">Portugal</div>
+          <div class="country-tab" onclick="openCountry('germany')">Germany</div>
+          <div class="country-tab" onclick="openCountry('france')">France</div>
+          <div class="country-tab" onclick="openCountry('poland')">Poland</div>
+          <div class="country-tab" onclick="openCountry('netherlands')">Netherlands</div>
+        </div>
+        
+        <!-- Latvia Content -->
+        <div id="latvia" class="country-content active">
+          <div class="compare-grid">
+            <div class="compare-card">
+              <h3 class="uni-name">Rezekne Academy of Technologies</h3>
+              <div class="uni-detail"><strong>Program:</strong> Management Science</div>
+              <div class="uni-detail"><strong>Tuition:</strong> €3,290/year</div>
+              <div class="uni-detail"><strong>Duration:</strong> 2 years</div>
+              <div class="uni-detail"><strong>Language:</strong> English</div>
+              
+              <div class="pros-cons">
+                <div class="pros">
+                  <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_up</span>
+                  <strong>Pros:</strong>
+                  <ul>
+                    <li>Lower cost than universities in Riga</li>
+                    <li>Practical focus</li>
+                    <li>Smaller class sizes</li>
+                  </ul>
+                </div>
+                <div class="cons">
+                  <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_down</span>
+                  <strong>Cons:</strong>
+                  <ul>
+                    <li>Smaller city (Rezekne)</li>
+                    <li>Less international recognition</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <a href="https://rta.lv/study-programms/management-science" target="_blank" class="note-link" style="margin-top: 12px; display: inline-block;">
+                <span class="material-icons">school</span>
+                Program Details
+              </a>
+            </div>
+            
+            <div class="compare-card">
+              <h3 class="uni-name">Daugavpils University</h3>
+              <div class="uni-detail"><strong>Program:</strong> Computer Science</div>
+              <div class="uni-detail"><strong>Tuition:</strong> €2,500-3,000/year</div>
+              <div class="uni-detail"><strong>Duration:</strong> 2 years</div>
+              <div class="uni-detail"><strong>Language:</strong> English</div>
+              
+              <div class="pros-cons">
+                <div class="pros">
+                  <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_up</span>
+                  <strong>Pros:</strong>
+                  <ul>
+                    <li>Technical program with good career prospects</li>
+                    <li>Affordable tuition</li>
+                    <li>Research opportunities</li>
+                  </ul>
+                </div>
+                <div class="cons">
+                  <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_down</span>
+                  <strong>Cons:</strong>
+                  <ul>
+                    <li>Located in Daugavpils (smaller city)</li>
+                    <li>More academically rigorous</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <a href="https://du.lv/en/studies/study-programmes/academic-master-study-programmes/computer-science/" target="_blank" class="note-link" style="margin-top: 12px; display: inline-block;">
+                <span class="material-icons">school</span>
+                Program Details
+              </a>
+            </div>
+            
+            <div class="compare-card">
+              <h3 class="uni-name">EKA University</h3>
+              <div class="uni-detail"><strong>Program:</strong> Business Administration</div>
+              <div class="uni-detail"><strong>Tuition:</strong> €3,200/year</div>
+              <div class="uni-detail"><strong>Duration:</strong> 2 years</div>
+              <div class="uni-detail"><strong>Language:</strong> English</div>
+              
+              <div class="pros-cons">
+                <div class="pros">
+                  <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_up</span>
+                  <strong>Pros:</strong>
+                  <ul>
+                    <li>Located in Riga (capital city)</li>
+                    <li>Business networking opportunities</li>
+                    <li>Practical business education</li>
+                  </ul>
+                </div>
+                <div class="cons">
+                  <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_down</span>
+                  <strong>Cons:</strong>
+                  <ul>
+                    <li>Higher cost of living in Riga</li>
+                    <li>More expensive than regional options</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <a href="https://www.augstskola.lv/?parent=123&lng=eng" target="_blank" class="note-link" style="margin-top: 12px; display: inline-block;">
+                <span class="material-icons">school</span>
+                Program Details
+              </a>
+            </div>
+          </div>
+          
+          <div style="margin-top: 24px; background-color: rgba(3, 218, 198, 0.1); padding: 16px; border-radius: 8px;">
+            <h3 style="margin-top: 0; color: var(--primary-color);">Why Latvia?</h3>
+            <p>Latvian universities offer good value for international students:</p>
+            <div>
+              <span class="tag">Affordable</span>
+              <span class="tag">English Programs</span>
+              <span class="tag">EU Degrees</span>
+              <span class="tag">Quality Education</span>
+            </div>
+            <p style="margin-bottom: 0;">Compared to Western Europe, Latvia provides quality education at lower costs, with all three being accredited institutions in the EU.</p>
+          </div>
+        </div>
+
+        <!-- Portugal Content -->
+<div id="portugal" class="country-content">
+  <div class="compare-grid">
+    <div class="compare-card">
+      <h3 class="uni-name">University of the Algarve</h3>
+      <div class="uni-detail"><strong>Program:</strong> PhD in Information Engineering</div>
+      <div class="uni-detail"><strong>Tuition and Fees 2025/2026:</strong></div>
+      <ul class="uni-detail">
+        <li><strong>National Students:</strong> 1500 Euros</li>
+        <li><strong>International Students:</strong> 4000 Euros</li>
+        <li><strong>Application Rate:</strong> 100 Euros</li>
+        <li><strong>Registration Fee and School Insurance:</strong> 275 Euros</li>
+      </ul>
+      <div class="uni-detail" style="margin-top: 8px;">
+        <em>Note: The rate of this course can be paid in 10 installments: the first at registration, and the rest from October to June.</em>
+      </div>
+      
+      <a href="https://www.ualg.pt/en/curso/1566" target="_blank" class="note-link" style="margin-top: 12px; display: inline-block;">
+        <span class="material-icons">school</span>
+        University Website
+      </a>
+    </div>
+  </div>
+</div>
+
+        
+        <!-- Germany Content -->
+        <div id="germany" class="country-content">
+          <div class="compare-grid">
+            <div class="compare-card">
+              <h3 class="uni-name">Technical University of Munich</h3>
+              <div class="uni-detail"><strong>Program:</strong> Computer Science</div>
+              <div class="uni-detail"><strong>Tuition:</strong> €0-€3,000/year</div>
+              <div class="uni-detail"><strong>Duration:</strong> 2 years</div>
+              <div class="uni-detail"><strong>Language:</strong> English/German</div>
+              
+              <div class="pros-cons">
+                <div class="pros">
+                  <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_up</span>
+                  <strong>Pros:</strong>
+                  <ul>
+                    <li>World-class reputation</li>
+                    <li>Low or no tuition fees</li>
+                    <li>Strong industry connections</li>
+                  </ul>
+                </div>
+                <div class="cons">
+                  <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_down</span>
+                  <strong>Cons:</strong>
+                  <ul>
+                    <li>Highly competitive admission</li>
+                    <li>Higher cost of living</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <a href="https://www.tum.de/en/" target="_blank" class="note-link" style="margin-top: 12px; display: inline-block;">
+                <span class="material-icons">school</span>
+                University Website
+              </a>
+            </div>
+            
+            <div class="compare-card">
+              <h3 class="uni-name">University of Freiburg</h3>
+              <div class="uni-detail"><strong>Program:</strong> Renewable Energy</div>
+              <div class="uni-detail"><strong>Tuition:</strong> €1,500/semester</div>
+              <div class="uni-detail"><strong>Duration:</strong> 2 years</div>
+              <div class="uni-detail"><strong>Language:</strong> English</div>
+              
+              <div class="pros-cons">
+                <div class="pros">
+                  <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_up</span>
+                  <strong>Pros:</strong>
+                  <ul>
+                    <li>Specialized programs</li>
+                    <li>Beautiful location</li>
+                    <li>Strong research focus</li>
+                  </ul>
+                </div>
+                <div class="cons">
+                  <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_down</span>
+                  <strong>Cons:</strong>
+                  <ul>
+                    <li>Smaller city</li>
+                    <li>Limited English programs</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <a href="https://www.uni-freiburg.de/" target="_blank" class="note-link" style="margin-top: 12px; display: inline-block;">
+                <span class="material-icons">school</span>
+                University Website
+              </a>
+            </div>
+          </div>
+          
+          <div style="margin-top: 24px; background-color: rgba(3, 218, 198, 0.1); padding: 16px; border-radius: 8px;">
+            <h3 style="margin-top: 0; color: var(--primary-color);">Why Germany?</h3>
+            <p>German universities are known for:</p>
+            <div>
+              <span class="tag">Low Tuition</span>
+              <span class="tag">High Quality</span>
+              <span class="tag">Strong Economy</span>
+              <span class="tag">Research Focus</span>
+            </div>
+            <p style="margin-bottom: 0;">Germany offers excellent education with minimal tuition fees at public universities, though admission can be competitive.</p>
+          </div>
+        </div>
+        
+        <!-- France Content -->
+        <div id="france" class="country-content">
+          <div class="compare-grid">
+            <div class="compare-card">
+              <h3 class="uni-name">Sorbonne University</h3>
+              <div class="uni-detail"><strong>Program:</strong> Computer Science</div>
+              <div class="uni-detail"><strong>Tuition:</strong> €2,770/year</div>
+              <div class="uni-detail"><strong>Duration:</strong> 2 years</div>
+              <div class="uni-detail"><strong>Language:</strong> French/English</div>
+              
+              <div class="pros-cons">
+                <div class="pros">
+                  <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_up</span>
+                  <strong>Pros:</strong>
+                  <ul>
+                    <li>Prestigious institution</li>
+                    <li>Affordable tuition</li>
+                    <li>Paris location</li>
+                  </ul>
+                </div>
+                <div class="cons">
+                  <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_down</span>
+                  <strong>Cons:</strong>
+                  <ul>
+                    <li>High cost of living in Paris</li>
+                    <li>French language required for many programs</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <a href="https://www.sorbonne-universite.fr/en" target="_blank" class="note-link" style="margin-top: 12px; display: inline-block;">
+                <span class="material-icons">school</span>
+                University Website
+              </a>
+            </div>
+          </div>
+          
+          <div style="margin-top: 24px; background-color: rgba(3, 218, 198, 0.1); padding: 16px; border-radius: 8px;">
+            <h3 style="margin-top: 0; color: var(--primary-color);">Why France?</h3>
+            <p>French higher education offers:</p>
+            <div>
+              <span class="tag">Cultural Experience</span>
+              <span class="tag">Affordable Tuition</span>
+              <span class="tag">Grandes Écoles</span>
+              <span class="tag">EU Location</span>
+            </div>
+            <p style="margin-bottom: 0;">France has a mix of public universities and prestigious Grandes Écoles, with relatively low tuition fees but higher living costs in cities like Paris.</p>
+          </div>
+        </div>
+        
+        <!-- Add more country contents as needed -->
+        <div id="poland" class="country-content">
+          <div class="compare-grid">
+            <div class="compare-card">
+              <h3 class="uni-name">University of Warsaw</h3>
+              <div class="uni-detail"><strong>Program:</strong> Economics</div>
+              <div class="uni-detail"><strong>Tuition:</strong> €2,000-3,000/year</div>
+              <div class="uni-detail"><strong>Duration:</strong> 2 years</div>
+              <div class="uni-detail"><strong>Language:</strong> English</div>
+              
+              <div class="pros-cons">
+                <div class="pros">
+                  <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_up</span>
+                  <strong>Pros:</strong>
+                  <ul>
+                    <li>Top-ranked in Poland</li>
+                    <li>Affordable cost of living</li>
+                    <li>Wide range of English programs</li>
+                  </ul>
+                </div>
+                <div class="cons">
+                  <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_down</span>
+                  <strong>Cons:</strong>
+                  <ul>
+                    <li>Less international recognition than Western Europe</li>
+                    <li>Colder climate</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <a href="https://en.uw.edu.pl/" target="_blank" class="note-link" style="margin-top: 12px; display: inline-block;">
+                <span class="material-icons">school</span>
+                University Website
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <div id="netherlands" class="country-content">
+          <div class="compare-grid">
+            <div class="compare-card">
+              <h3 class="uni-name">University of Amsterdam</h3>
+              <div class="uni-detail"><strong>Program:</strong> Business Administration</div>
+              <div class="uni-detail"><strong>Tuition:</strong> €12,000-15,000/year</div>
+              <div class="uni-detail"><strong>Duration:</strong> 1-2 years</div>
+              <div class="uni-detail"><strong>Language:</strong> English</div>
+              
+              <div class="pros-cons">
+                <div class="pros">
+                  <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_up</span>
+                  <strong>Pros:</strong>
+                  <ul>
+                    <li>Highly international environment</li>
+                    <li>Excellent reputation</li>
+                    <li>All programs in English</li>
+                  </ul>
+                </div>
+                <div class="cons">
+                  <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">thumb_down</span>
+                  <strong>Cons:</strong>
+                  <ul>
+                    <li>High tuition fees</li>
+                    <li>Competitive admission</li>
+                    <li>Expensive housing</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <a href="https://www.uva.nl/" target="_blank" class="note-link" style="margin-top: 12px; display: inline-block;">
+                <span class="material-icons">school</span>
+                University Website
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <button class="fab" aria-label="Add new note">
+    <span class="material-icons">add</span>
+  </button>
+
+  <script>
+    function openTab(tabId) {
+      // Hide all tab contents
+      const tabContents = document.getElementsByClassName('tab-content');
+      for (let i = 0; i < tabContents.length; i++) {
+        tabContents[i].classList.remove('active');
+      }
+      
+      // Remove active class from all tabs
+      const tabs = document.getElementsByClassName('tab');
+      for (let i = 0; i < tabs.length; i++) {
+        tabs[i].classList.remove('active');
+      }
+      
+      // Show the selected tab content and mark tab as active
+      document.getElementById(tabId).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+    
+    function openCountry(countryId) {
+      // Hide all country contents
+      const countryContents = document.getElementsByClassName('country-content');
+      for (let i = 0; i < countryContents.length; i++) {
+        countryContents[i].classList.remove('active');
+      }
+      
+      // Remove active class from all country tabs
+      const countryTabs = document.getElementsByClassName('country-tab');
+      for (let i = 0; i < countryTabs.length; i++) {
+        countryTabs[i].classList.remove('active');
+      }
+      
+      // Show the selected country content and mark tab as active
+      document.getElementById(countryId).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+  </script>
+</body>
+</html>
